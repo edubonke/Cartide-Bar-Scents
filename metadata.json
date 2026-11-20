@@ -1,0 +1,6 @@
+{
+  "name": "Cartide Bar Scents",
+  "description": "Artisan solid perfume bars crafted in small batches. Sophisticated luxury scent — luxury begins where ordinary ends.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
