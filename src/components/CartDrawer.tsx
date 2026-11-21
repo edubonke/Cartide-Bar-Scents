@@ -44,6 +44,13 @@ export function CartDrawer({
 
   useEffect(() => {
     if (!open) return;
+    const previousOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    return () => { document.documentElement.style.overflow = previousOverflow; };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
@@ -87,7 +94,7 @@ export function CartDrawer({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex justify-end bg-[#161412]/40 backdrop-blur-[2px]"
+      className="fixed inset-0 z-50 flex justify-end h-dvh max-w-full bg-[#161412]/40 backdrop-blur-[2px]"
       role="presentation"
       onClick={(e) => {
         if (e.target === e.currentTarget) handleCloseAndReset();
@@ -97,10 +104,10 @@ export function CartDrawer({
         role="dialog"
         aria-modal="true"
         aria-label="Shopping bag"
-        className="w-full max-w-md h-full bg-[#F6F4EF] text-[#161412] border-l border-[#161412]/12 flex flex-col justify-between shadow-2xl"
+        className="w-full max-w-md min-w-0 h-full min-h-0 bg-[#F6F4EF] text-[#161412] border-l border-[#161412]/12 flex flex-col shadow-2xl"
       >
         {/* Top Header */}
-        <div className="px-6 py-5 border-b border-[#161412]/10 flex items-center justify-between">
+        <div className="px-4 sm:px-6 py-4 sm:py-5 shrink-0 border-b border-[#161412]/10 flex items-center justify-between gap-2">
           <div>
             <h2 className="font-display text-2xl font-medium tracking-tight">
               {step === 'bag' && 'Your Bag'}
@@ -117,14 +124,14 @@ export function CartDrawer({
             type="button"
             onClick={handleCloseAndReset}
             aria-label="Close shopping bag"
-            className="w-10 h-10 inline-flex items-center justify-center text-[#5A554E] hover:text-[#161412] transition-colors cursor-pointer"
+            className="w-11 h-11 shrink-0 inline-flex items-center justify-center text-[#5A554E] hover:text-[#161412] transition-colors cursor-pointer"
           >
             <X size={20} strokeWidth={1.5} />
           </button>
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto px-6 py-6">
+        <div className="flex-1 min-h-0 min-w-0 overflow-y-auto overscroll-contain px-4 sm:px-6 py-6">
           {step === 'confirmed' ? (
             <div className="py-10 space-y-6">
               <div className="w-11 h-11 flex items-center justify-center border border-[#8C6A43] text-[#8C6A43]">
@@ -142,9 +149,9 @@ export function CartDrawer({
                 </p>
               </div>
               <div className="border-t border-b border-[#161412]/10 py-4 space-y-2 text-sm">
-                <div className="flex justify-between">
+                <div className="flex justify-between gap-3">
                   <span className="text-[#5A554E]">Destination</span>
-                  <span className="text-right font-medium">
+                  <span className="min-w-0 [overflow-wrap:anywhere] text-right font-medium">
                     {form.address}, {form.city}
                   </span>
                 </div>
@@ -204,18 +211,18 @@ export function CartDrawer({
                 {items.map((item) => (
                   <li
                     key={`${item.productId}-${item.variantId}`}
-                    className="py-5 first:pt-0 flex gap-4"
+                    className="py-5 first:pt-0 flex gap-3 sm:gap-4"
                   >
                     <ResilientImage
                       src={item.image}
                       alt={item.imageAlt}
-                      containerClassName="w-20 h-24 shrink-0"
+                      containerClassName="w-16 h-20 sm:w-20 sm:h-24 shrink-0"
                       className="w-full h-full object-cover"
                       fallbackTitle={item.name}
                     />
                     <div className="flex-1 min-w-0 flex flex-col justify-between">
                       <div className="flex items-start justify-between gap-2">
-                        <div>
+                        <div className="min-w-0">
                           <h3 className="font-display text-lg font-medium leading-snug text-[#161412]">
                             {item.name}
                           </h3>
@@ -225,19 +232,19 @@ export function CartDrawer({
                           type="button"
                           onClick={() => onRemoveItem(item.productId, item.variantId)}
                           aria-label={`Remove ${item.name} (${item.variantLabel})`}
-                          className="p-1.5 text-[#5A554E] hover:text-[#161412] transition-colors cursor-pointer"
+                          className="w-11 h-11 shrink-0 inline-flex items-center justify-center text-[#5A554E] hover:text-[#161412] transition-colors cursor-pointer"
                         >
                           <Trash2 size={15} strokeWidth={1.5} />
                         </button>
                       </div>
 
-                      <div className="flex items-center justify-between pt-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-3">
                         <div className="inline-flex items-center border border-[#161412]/15">
                           <button
                             type="button"
                             onClick={() => onUpdateQuantity(item.productId, item.variantId, -1)}
                             aria-label={`Decrease quantity of ${item.name}`}
-                            className="w-8 h-8 inline-flex items-center justify-center text-[#161412] hover:bg-[#EDE9E0] transition-colors cursor-pointer"
+                            className="w-11 h-11 inline-flex items-center justify-center text-[#161412] hover:bg-[#EDE9E0] transition-colors cursor-pointer"
                           >
                             <Minus size={13} strokeWidth={1.5} />
                           </button>
@@ -248,7 +255,7 @@ export function CartDrawer({
                             type="button"
                             onClick={() => onUpdateQuantity(item.productId, item.variantId, 1)}
                             aria-label={`Increase quantity of ${item.name}`}
-                            className="w-8 h-8 inline-flex items-center justify-center text-[#161412] hover:bg-[#EDE9E0] transition-colors cursor-pointer"
+                            className="w-11 h-11 inline-flex items-center justify-center text-[#161412] hover:bg-[#EDE9E0] transition-colors cursor-pointer"
                           >
                             <Plus size={13} strokeWidth={1.5} />
                           </button>
@@ -336,7 +343,7 @@ export function CartDrawer({
 
         {/* Footer Totals & Actions */}
         {items.length > 0 && step !== 'confirmed' && (
-          <div className="px-6 py-5 border-t border-[#161412]/10 bg-[#EDE9E0]/60 space-y-4">
+          <div className="shrink-0 min-w-0 px-4 sm:px-6 py-4 sm:py-5 border-t border-[#161412]/10 bg-[#EDE9E0]/60 space-y-4">
             <div className="space-y-1.5 text-sm">
               <div className="flex justify-between text-[#5A554E] tabular-nums">
                 <span>Subtotal</span>
@@ -372,7 +379,7 @@ export function CartDrawer({
                 <button
                   type="submit"
                   form="checkout-form"
-                  className="flex-1 py-3.5 px-6 text-xs font-semibold tracking-widest uppercase bg-[#161412] text-[#F6F4EF] hover:bg-[#8C6A43] transition-colors cursor-pointer"
+                  className="flex-1 min-w-0 py-3.5 px-3 sm:px-6 text-xs font-semibold tracking-widest uppercase bg-[#161412] text-[#F6F4EF] hover:bg-[#8C6A43] transition-colors cursor-pointer"
                 >
                   Preview Order · {formatRand(summary.total)}
                 </button>

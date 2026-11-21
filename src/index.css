@@ -29,6 +29,17 @@ html {
   font-variant-numeric: tabular-nums;
 }
 
+/* Keep narrow-screen controls comfortably tappable without enlarging their text. */
+@media (max-width: 1024px), (pointer: coarse) {
+  button, a[href] {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  input, select {
+    min-height: 44px;
+  }
+}
+
 /* Subtle looping scent-diffusion aura for Hero background (compositor-only) */
 @keyframes scentDiffusion {
   0% {

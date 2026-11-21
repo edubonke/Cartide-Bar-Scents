@@ -1,0 +1,32 @@
+name: Mobile visual and interaction QA
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install --no-audit --no-fund
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
+      - run: npm install --no-save --no-audit --no-fund playwright
+      - run: npx playwright install --with-deps chromium
+      - run: node mobile-qa/test-mobile.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cartide-mobile-qa
+          path: mobile-qa/screenshots/
+          retention-days: 7
