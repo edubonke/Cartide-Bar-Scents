@@ -25,12 +25,21 @@ async function inspect(page, name, device, capture=false) {
       const r = e.getBoundingClientRect(); const s = getComputedStyle(e);
       return r.width && r.height && s.visibility !== 'hidden' && (r.left < -1 || r.right > width + 1) && s.position !== 'absolute' && !e.closest('[aria-hidden="true"]');
     }).slice(0,7).map(e => ({tag:e.tagName, text:e.innerText?.slice(0,50), rect:[Math.round(e.getBoundingClientRect().left), Math.round(e.getBoundingClientRect().right)]}));
-    const controls = [...document.querySelectorAll('button,a,input,select')].map(e => { const r=e.getBoundingClientRect(); return {name:e.getAttribute('aria-label') || e.innerText?.trim() || e.getAttribute('placeholder'), width:Math.round(r.width),height:Math.round(r.height),top:Math.round(r.top)}; }).filter(x=>x.width && x.height && (x.height<44 || x.width<44));
-    return {width, height:innerHeight, scrollWidth:document.documentElement.scrollWidth, overflow, smallControls:controls.slice(0,10), brokenImages:[...document.images].filter(i=>i.complete&&!i.naturalWidth).map(i=>i.src), images:[...document.images].length};
+    const controls = [...document.querySelectorAll('button,a[href],input,select')].map(e => { const r=e.getBoundingClientRect(); return {name:e.getAttribute('aria-label') || e.innerText?.trim() || e.getAttribute('placeholder'), width:Math.round(r.width),height:Math.round(r.height),top:Math.round(r.top)}; }).filter(x=>x.width && x.height && (x.height<44 || x.width<44));
+    const drawer = document.querySelector('[aria-label="Shopping bag"]');
+    const panel = drawer?.getBoundingClientRect();
+    return {width, height:innerHeight, scrollWidth:document.documentElement.scrollWidth, overflow, smallControls:controls, brokenImages:[...document.images].filter(i=>i.complete&&!i.naturalWidth).map(i=>i.src), images:[...document.images].length, panel:panel?{left:panel.left,right:panel.right,top:panel.top,bottom:panel.bottom,scrollWidth:drawer.scrollWidth,clientWidth:drawer.clientWidth}:null};
   });
   results.push({device,name,...stats});
   if (capture) await page.screenshot({path:path.join(out,`${device}-${name}.png`),animations:'disabled'});
   console.log(JSON.stringify({device,name,width:stats.width,scrollWidth:stats.scrollWidth,brokenImages:stats.brokenImages.length,overflow:stats.overflow,smallControls:stats.smallControls}));
+  assert.equal(stats.scrollWidth,stats.width,`${device} ${name}: horizontal page overflow`);
+  assert.equal(stats.brokenImages.length,0,`${device} ${name}: broken images`);
+  if(stats.width<=1024) assert.equal(stats.smallControls.length,0,`${device} ${name}: undersized tap targets ${JSON.stringify(stats.smallControls)}`);
+  if(stats.panel){
+    assert.ok(stats.panel.left>=-1 && stats.panel.right<=stats.width+1 && stats.panel.top>=-1 && stats.panel.bottom<=stats.height+1,`${device} ${name}: drawer outside viewport ${JSON.stringify(stats.panel)}`);
+    assert.equal(stats.panel.scrollWidth,stats.panel.clientWidth,`${device} ${name}: drawer overflow`);
+  }
 }
 
 async function go(page, label) {
@@ -53,6 +62,8 @@ async function go(page, label) {
     ['iphone',{...devices['iPhone 13'],defaultBrowserType:undefined,deviceScaleFactor:1}],
     ['android',{viewport:{width:412,height:915},isMobile:true,hasTouch:true,deviceScaleFactor:1}],
     ['tablet',{viewport:{width:768,height:1024},isMobile:true,hasTouch:true,deviceScaleFactor:1}],
+    ['small-desktop',{viewport:{width:1024,height:768},deviceScaleFactor:1}],
+    ['desktop',{viewport:{width:1440,height:900},deviceScaleFactor:1}],
   ];
   for(const [device,config] of targets){
     const context=await browser.newContext({...config,reducedMotion:'reduce'});
@@ -82,7 +93,7 @@ async function go(page, label) {
     await inspect(page,'04-product',device,true);
     await page.getByRole('radio',{name:/Atelier Wax Refill/}).click();
     await page.getByRole('button',{name:'Increase quantity',exact:true}).click();
-    await inspect(page,'05-variant',device,device==='iphone');
+    await inspect(page,'05-variant',device,true);
     await page.getByRole('button',{name:/Add to Cart · R420/}).click();
     await page.getByRole('dialog',{name:'Shopping bag'}).waitFor();
     assert.ok((await page.getByRole('dialog').innerText()).includes('R485'));
@@ -97,16 +108,18 @@ async function go(page, label) {
     await page.getByRole('textbox',{name:'City'}).fill('Demo City');
     await page.getByRole('button',{name:/Preview Order/}).click();
     assert.ok((await page.getByRole('dialog').innerText()).includes('No payment was collected'));
-    await inspect(page,'08-confirmation',device,device==='iphone'||device==='small-phone');
+    await inspect(page,'08-confirmation',device,true);
     await page.getByRole('button',{name:'Continue Exploring'}).click();
     await go(page,'The Story');
     await inspect(page,'09-story',device,device==='iphone'||device==='tablet');
     await go(page,'Journal');
     await inspect(page,'10-journal',device,device==='iphone'||device==='tablet');
     await page.getByRole('button',{name:'Read Why Solid Perfumery Outlasts the Alcohol Flash'}).click();
-    await inspect(page,'11-essay',device,device==='iphone');
+    await inspect(page,'11-essay',device,true);
     await page.getByRole('button',{name:'Close essay'}).click();
     console.log(JSON.stringify({device,status:'FLOW PASS',errors,failedLocalRequests:failures.filter(r=>r.url.startsWith('http://127.0.0.1')),externalRequestsBlocked:failures.filter(r=>!r.url.startsWith('http://127.0.0.1')).length}));
+    assert.equal(errors.length,0,`${device}: runtime errors`);
+    assert.equal(failures.filter(r=>r.url.startsWith('http://127.0.0.1')).length,0,`${device}: failed local requests`);
     await context.close();
   }
   fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(results,null,2));

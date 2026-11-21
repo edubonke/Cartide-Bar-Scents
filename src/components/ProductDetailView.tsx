@@ -87,7 +87,7 @@ export function ProductDetailView({
         </div>
 
         {/* Right Purchase & Olfactory Module */}
-        <div className="lg:col-span-5 space-y-8">
+        <div className="lg:col-span-5 min-w-0 space-y-8">
           <div className="space-y-3 pb-6 border-b border-[#161412]/10">
             <p className="text-xs text-[#5A554E] tracking-wide">
               {product.scentFamily} <span aria-hidden="true">·</span> {product.batchCode}
@@ -141,8 +141,8 @@ export function ProductDetailView({
           </div>
 
           {/* Quantity & Primary Add to Cart CTA */}
-          <div className="flex items-stretch gap-3">
-            <div className="inline-flex items-center border border-[#161412]/20 bg-[#F6F4EF]">
+          <div className="flex flex-wrap items-stretch gap-3">
+            <div className="inline-flex items-center justify-center shrink-0 border border-[#161412]/20 bg-[#F6F4EF]">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -170,7 +170,7 @@ export function ProductDetailView({
             <button
               type="button"
               onClick={handleAdd}
-              className="flex-1 h-12 px-6 inline-flex items-center justify-center gap-2 text-xs font-semibold tracking-widest uppercase bg-[#161412] text-[#F6F4EF] hover:bg-[#8C6A43] transition-colors duration-200 cursor-pointer whitespace-nowrap"
+              className="flex-[1_0_185px] min-w-0 min-h-12 px-4 py-2 inline-flex items-center justify-center gap-2 text-xs font-semibold tracking-widest uppercase bg-[#161412] text-[#F6F4EF] hover:bg-[#8C6A43] transition-colors duration-200 cursor-pointer whitespace-nowrap"
             >
               {justAdded ? (
                 <>

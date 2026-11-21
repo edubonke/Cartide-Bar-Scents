@@ -8,8 +8,8 @@ export function Footer({ onNavigate }: FooterProps) {
   return (
     <footer className="border-t border-[#161412]/12 bg-[#EDE9E0]/55 text-[#161412]">
       <div className="max-w-[1280px] mx-auto px-6 md:px-10 py-16 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-14 border-b border-[#161412]/10">
-          <div className="md:col-span-5 space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-12 pb-14 border-b border-[#161412]/10">
+          <div className="sm:col-span-2 lg:col-span-5 min-w-0 space-y-4">
             <p className="font-display text-2xl font-medium tracking-tight text-[#161412]">
               Cartide Bar Scents
             </p>
@@ -22,11 +22,11 @@ export function Footer({ onNavigate }: FooterProps) {
             </p>
           </div>
 
-          <div className="md:col-span-3 space-y-3">
+          <div className="lg:col-span-3 min-w-0 space-y-3">
             <h2 className="text-xs font-semibold tracking-widest uppercase text-[#5A554E]">
               House
             </h2>
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-1 lg:space-y-2.5 text-sm">
               <li>
                 <button
                   type="button"
@@ -57,7 +57,7 @@ export function Footer({ onNavigate }: FooterProps) {
             </ul>
           </div>
 
-          <div className="md:col-span-4 space-y-3">
+          <div className="lg:col-span-4 min-w-0 space-y-3">
             <h2 className="text-xs font-semibold tracking-widest uppercase text-[#5A554E]">
               Atelier & Dispatch
             </h2>
@@ -67,7 +67,7 @@ export function Footer({ onNavigate }: FooterProps) {
             <p className="text-sm text-[#5A554E]">
               Complimentary South African courier on orders above R700.
             </p>
-            <div className="pt-2 flex items-center gap-6 text-sm">
+            <div className="pt-2 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm">
               <a
                 href="#atelier-dispatch"
                 onClick={(e) => {
@@ -77,13 +77,13 @@ export function Footer({ onNavigate }: FooterProps) {
                     document.getElementById('atelier-dispatch')?.scrollIntoView({ behavior: 'smooth' });
                   }, 60);
                 }}
-                className="text-[#161412] hover:text-[#8C6A43] underline underline-offset-4 decoration-[#161412]/25 transition-colors"
+                className="inline-flex items-center text-[#161412] hover:text-[#8C6A43] underline underline-offset-4 decoration-[#161412]/25 transition-colors"
               >
                 Instagram
               </a>
               <a
                 href="mailto:atelier@cartidebarscents.com"
-                className="text-[#161412] hover:text-[#8C6A43] underline underline-offset-4 decoration-[#161412]/25 transition-colors"
+                className="inline-flex items-center min-w-0 max-w-full [overflow-wrap:anywhere] text-[#161412] hover:text-[#8C6A43] underline underline-offset-4 decoration-[#161412]/25 transition-colors"
               >
                 atelier@cartidebarscents.com
               </a>
