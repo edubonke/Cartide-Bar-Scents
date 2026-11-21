@@ -1,6 +1,6 @@
 # Cartide Bar Scents
 
-Responsive artisan solid perfume storefront concept built with React, TypeScript, Vite and Tailwind CSS. The catalog, product images, scent filters, product variants, shopping bag and editorial content are included locally.
+Responsive fragrance storefront built with React, TypeScript, Vite and Tailwind CSS. The catalogue uses actual Cartide product images and the brand's public social identity, with category filters and a locally stored enquiry bag.
 
 ## Development
 
@@ -10,6 +10,6 @@ Use Node.js 24 or later. Run `npm install`, `npm test`, `npm run lint`, and `npm
 
 The GitHub Actions Pages workflow installs dependencies, runs tests and builds the `dist` directory. In repository Settings → Pages, select GitHub Actions as the source.
 
-## Demo checkout
+## Catalogue sources and enquiries
 
-This is a frontend concept, not a live payment or order system. Shopping bag contents are stored locally in the browser. Checkout details are not transmitted, no payment is collected, and no order, receipt or dispatch is created. Business contact details and terms must be verified before commercial launch.
+The product photos and logo artwork are sourced from [Cartide Instagram](https://www.instagram.com/cartide_barscents/) and the pricing reference is the June 14, 2026 post on [Cartide Facebook](https://www.facebook.com/people/Cartide-Bar-Scents/61590558068103/). Individual source posts are linked in the catalogue. The R370 promotion is historical; all current prices, stock, delivery, and unconfirmed sizes must be verified directly with Cartide. The frontend prepares a copyable enquiry and opens the official social profiles. It does not submit personal data, collect payments, create orders, or promise delivery.

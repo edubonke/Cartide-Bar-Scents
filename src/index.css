@@ -1,117 +1,33 @@
 @import "tailwindcss";
-
-:root {
-  --bg-bone: #F6F4EF;
-  --bg-alabaster: #EDE9E0;
-  --ink-black: #161412;
-  --ink-muted: #5A554E;
-  --accent-bronze: #8C6A43;
-  --accent-bronze-deep: #6D5030;
-  --hairline: rgba(22, 20, 18, 0.11);
-}
-
-html {
-  scroll-behavior: smooth;
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: var(--bg-bone);
-  color: var(--ink-black);
-}
-
-.font-display {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-}
-
-.font-sans-body {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
-}
-
-/* Keep narrow-screen controls comfortably tappable without enlarging their text. */
-@media (max-width: 1024px), (pointer: coarse) {
-  button, a[href] {
-    min-width: 44px;
-    min-height: 44px;
-  }
-  input, select {
-    min-height: 44px;
-  }
-}
-
-/* Subtle looping scent-diffusion aura for Hero background (compositor-only) */
-@keyframes scentDiffusion {
-  0% {
-    transform: translate3d(-4%, -3%, 0) scale(1);
-    opacity: 0.45;
-  }
-  50% {
-    transform: translate3d(4%, 3%, 0) scale(1.08);
-    opacity: 0.72;
-  }
-  100% {
-    transform: translate3d(-4%, -3%, 0) scale(1);
-    opacity: 0.45;
-  }
-}
-
-@keyframes scentDiffusionSecondary {
-  0% {
-    transform: translate3d(5%, -2%, 0) scale(1.06);
-    opacity: 0.35;
-  }
-  50% {
-    transform: translate3d(-3%, 4%, 0) scale(0.98);
-    opacity: 0.58;
-  }
-  100% {
-    transform: translate3d(5%, -2%, 0) scale(1.06);
-    opacity: 0.35;
-  }
-}
-
-.animate-scent-primary {
-  animation: scentDiffusion 16s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  will-change: transform, opacity;
-}
-
-.animate-scent-secondary {
-  animation: scentDiffusionSecondary 22s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  will-change: transform, opacity;
-}
-
-/* Gentle scroll-triggered reveal with zero-latency visibility fallback */
-.editorial-reveal {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  transition:
-    opacity 650ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.editorial-reveal[data-reveal="pending"] {
-  opacity: 0;
-  transform: translate3d(0, 18px, 0);
-}
-
-.editorial-reveal[data-reveal="visible"] {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .animate-scent-primary,
-  .animate-scent-secondary {
-    animation: none;
-  }
-  .editorial-reveal,
-  .editorial-reveal[data-reveal="pending"] {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
+:root {font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#1b1712;background:#f8f3e8;font-synthesis:none}
+html {scroll-behavior:smooth}
+body {margin:0}
+button {cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible {outline:2px solid #a87d38;outline-offset:3px}
+.font-display {font-family:'Cormorant Garamond',Georgia,serif}
+.font-sans-body {font-family:'Plus Jakarta Sans',Arial,sans-serif}
+.site-width {max-width:1280px;margin-inline:auto;padding-inline:24px}
+@media(min-width:768px){.site-width{padding-inline:40px}}
+@media(max-width:359px){.site-width{padding-inline:16px}}
+.brand-wordmark {display:inline-flex;align-items:center;gap:7px;white-space:nowrap;font-family:'Cormorant Garamond',Georgia,serif;font-size:26px;line-height:.9;letter-spacing:.02em;color:#f3db9b;flex-shrink:0;min-width:0}
+.brand-monogram {width:45px;height:45px;flex-shrink:0;background-image:url('./assets/brand/logo.jpg');background-size:128px;background-position:center -11px;background-repeat:no-repeat;background-color:#000}
+.eyebrow {font-size:11px;letter-spacing:.14em;font-weight:700;text-transform:uppercase;color:#77521d}
+[data-theme='dark'] .eyebrow, footer .eyebrow {color:#d3b779}
+.section-title {font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(2.4rem,5vw,4.2rem);line-height:1.02;margin-top:.4rem}
+.muted {color:#655d50}
+.gold-button,.dark-button,.outline-gold {display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 20px;text-align:center;font-size:12px;letter-spacing:.06em;font-weight:700;text-transform:uppercase;line-height:1.35;transition:background-color .2s,color .2s;border:1px solid transparent}
+.gold-button {background:#d6b674;color:#17120c;border-color:#d6b674}
+.gold-button:hover{background:#edcc89}
+.dark-button{background:#17130f;color:#f5e5c4;border-color:#17130f}
+.dark-button:hover{background:#3c3022}
+.outline-gold {border-color:#b89556;color:#f5e5c4}
+.outline-gold:hover{background:#d6b674;color:#17120c}
+.nav-link {font-size:13px;min-height:44px;color:#ded1b7;font-weight:600;white-space:nowrap}
+.nav-link.active {color:#f4d892;box-shadow:inset 0 -2px #d6b674}
+.text-link {display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;font-size:12px;font-weight:700;color:#75501a;letter-spacing:.03em;text-align:left}
+.text-link:hover{text-decoration:underline;text-underline-offset:3px}
+.filter-button{min-height:44px;padding:8px 16px;border:1px solid #b89d71;background:#f0e6d4;color:#5a4021;font-weight:600;font-size:12px;white-space:nowrap}
+.filter-button.selected{background:#1b1712;color:#f8e9c7;border-color:#1b1712}
+@media(max-width:1024px),(pointer:coarse){button,a[href],input,textarea{min-height:44px}button,a[href]{min-width:44px}}
+@media(max-width:359px){.brand-wordmark{font-size:22px;gap:5px}.brand-monogram{width:40px;height:40px;background-size:116px;background-position:center -10px}.outline-gold{padding-inline:10px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
